@@ -65,3 +65,43 @@ router.get("/:id", (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// POST route to connect user session then create new post
+router.post("/", withAuth, (req, res) => {
+  Post.create({
+    title: req.body.title,
+    content: req.body.content,
+    user_id: req.session.user_id,
+  })
+    .then((postData) => res.json(postData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+// PUT by id route update selected post data with new data
+router.put("/:id", withAuth, (req, res) => {
+  Post.update(
+    {
+      title: req.body.title,
+      content: req.body.content,
+    },
+    {
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((postData) => {
+      if (!postData) {
+        res.status(404).json({ message: "No post found with this id" });
+        return;
+      }
+      res.json(postData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
