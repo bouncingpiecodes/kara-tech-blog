@@ -34,3 +34,46 @@ router.get("/", withAuth, (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// GET post by id allows loggedin user to see the sepecific post content and direct to edit page
+router.get("/edit/:id", withAuth, (req, res) => {
+  Post.findOne({
+    where: {
+      id: req.params.id,
+    },
+    attributes: ["id", "title", "content", "created_at"],
+    include: [
+      {
+        model: User,
+        attributes: ["username"],
+      },
+      {
+        model: Comment,
+        attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+        include: {
+          model: User,
+          attributes: ["username"],
+        },
+      },
+    ],
+  })
+    .then((postData) => {
+      if (!postData) {
+        res.status(404).json({ message: "No post found with this id" });
+        return;
+      }
+      const post = postData.get({ plain: true });
+      res.render("edit-post", { post, loggedIn: true });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+//GET /new render add-post page when user want to add a new post
+router.get("/new", (req, res) => {
+  res.render("add-post");
+});
+
+module.exports = router;
