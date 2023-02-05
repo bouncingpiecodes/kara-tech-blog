@@ -76,7 +76,7 @@ router.post("/", (req, res) => {
     });
 });
 
-// post '/login' when user clicks login button, find their corresponding username
+// post /login when user clicks login button, and find their corresponding username
 router.post("/login", (req, res) => {
   User.findOne({
     where: {
