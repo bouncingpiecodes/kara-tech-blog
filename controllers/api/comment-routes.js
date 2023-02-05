@@ -68,3 +68,25 @@ router.put("/:id", withAuth, (req, res) => {
       res.status(500).json(err);
     });
 });
+
+// DELETE route delete a comment with the comment id
+router.delete("/:id", withAuth, (req, res) => {
+  Comment.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((commentData) => {
+      if (!commentData) {
+        res.status(404).json({ message: "No comment found with this id" });
+        return;
+      }
+      res.json(commentData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+module.exports = router;
