@@ -4,7 +4,7 @@ const { Post, User, Comment } = require("../../models");
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
-// GET 'api/posts/' find all content and post it on page
+// GET api/posts/ find all content and post it on page
 router.get("/", (req, res) => {
   Post.findAll({
     attributes: ["id", "title", "content", "created_at"],
