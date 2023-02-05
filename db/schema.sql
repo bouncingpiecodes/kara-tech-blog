@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS kara_techBlog;
+
+CREATE DATABASE kara_techBlog;
